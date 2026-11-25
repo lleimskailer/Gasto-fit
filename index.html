@@ -234,6 +234,9 @@ body.ldm #fab{display:none}
 .vwa{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:96px 22px 48px;text-align:center;overflow-y:auto;cursor:pointer}
 .vwab{font:800 clamp(38px,12vw,78px)/1.05 var(--d);color:#fff;word-break:break-word}
 .vwas{margin-top:18px;font-size:18px;color:var(--a)}
+.rtn{cursor:pointer;text-decoration:underline;text-decoration-color:#555;text-underline-offset:4px}
+.rsh{margin-left:auto;flex:none;width:40px;height:40px;border-radius:50%;background:#111;border:1px solid var(--a);color:var(--a);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.rsh:active{background:var(--a);color:#000}
 </style>
 </head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="gfsh" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="gamma" amplitude="1" exponent="1.5" offset="0"/><feFuncG type="gamma" amplitude="1" exponent="1.5" offset="0"/><feFuncB type="gamma" amplitude="1" exponent="1.5" offset="0"/></feComponentTransfer></filter></svg><div id="gl"></div>
 <header><div class="top"><div id="bud" data-bud></div><h1 data-egg>Gasto <b>Fit</b></h1><div class="rb"><div class="cb bd" data-code>Code</div><div class="cb bd" id="fb" data-t="x">Filtros</div></div></div><div class="tabs" id="tabs"></div></header>
@@ -296,7 +299,7 @@ sh(`<div class="gal">${i.im.map((s,n)=>`<div class="gi"><img src="${s}" data-vw=
 <div class="lb">Local</div><div class="chs">${ch('lo',locs(),i.lo)}</div>${adr('lo','Nuevo local…')}
 <div class="lb">Dirección</div><input data-f="ad" value="${e(i.ad)}" placeholder="Calle y número" autocomplete="off"><div class="r2"><input data-f="pi" value="${e(i.pi)}" placeholder="Piso o galería"><input data-f="st" value="${e(i.st)}" placeholder="Estación cercana"></div>${!hasAd(i)&&covered(i)?`<div class="s" style="margin-top:6px">Usa la dirección del local: ${e(S.L[i.lo].ad)}</div>`:''}
 <div class="lb">Talle</div>${ddT(i.ta)}<div class="lb">Color</div>${dd('cl',colors(),i.cl,'Elegir color','Otro color…')}
-<div class="lb">Link del producto</div><input data-f="ln" inputmode="url" value="${e(i.ln)}" placeholder="https://">
+<div class="dd" style="margin-top:16px"><div class="dh bd" data-dd="info"><span>Información adicional</span><b>${op=='info'?'▴':'▾'}</b></div>${op=='info'?`<div class="dl bd" style="max-height:none;overflow:visible;padding:2px 12px 14px"><div class="lb">WhatsApp</div><input data-f="wa" inputmode="tel" value="${e(i.wa)}" placeholder="5491122334455"><div class="lb">Instagram</div><input data-f="ig" value="${e(i.ig)}" placeholder="@usuario"><div class="lb">Página web</div><input data-f="ln" inputmode="url" autocapitalize="none" autocorrect="off" value="${e(i.ln)}" placeholder="https://"><div class="lb">Horarios</div><input data-f="hs" value="${e(i.hs)}" placeholder="Lun a sáb de 10 a 20"><div class="lb">Notas del local</div><textarea data-f="nl" placeholder="Notas del local">${e(i.nl)}</textarea></div>`:''}</div>
 <div class="lb">Estado</div>${ch('est',EST,i.est)}<div class="lb">Prioridad</div>${ch('pri',PRI,i.pri)}<div class="lb">Visitar</div>${ch('vi',['Sí','No'],effVi(i)?'Sí':'No')}
 <div class="lb">Etiquetas (separadas por coma)</div><input data-f="tg" value="${e(i.tg)}" placeholder="verano, diario">
 <div class="s" style="margin-top:12px">Agregada el ${new Date(i.dt).toLocaleDateString('es-AR')}</div>
@@ -309,7 +312,7 @@ sh(`<h2>Filtros</h2><div class="lb">Buscar por título</div><input data-fl="q" v
 <div class="lb">Ordenar</div>${o('ord',[['new','Más nuevo a más viejo'],['old','Más viejo a más nuevo'],['lo','Precio: de bajo a alto'],['hi','Precio: de alto a bajo']],null)}
 <div class="r2" style="margin-top:18px"><button class="bt" data-clr>Limpiar</button><button class="bt pr" data-cl>Ver resultados</button></div>`,keep)}
 function ol(n,keep){cur={k:'l',n};if(!keep){rnm=0;lcm=false;rpm=0;rps=[];lgi=0}const m=S.L[n]=S.L[n]||{},l=S.it.filter(i=>i.lo==n);
-sh(`${cre&&n===''?`<input id="rni" data-rnm placeholder="Nombre del local" value="${e(cre.nm||'')}" style="margin:6px 0 4px">${cre.w?'<div class="err" id="crw">Se eliminará este local al salir porque falta un nombre o está repetido. Tocá la ✕ de nuevo para salir sin guardar.</div>':''}`:rnm?`<div class="ar" style="margin:6px 0 4px"><input id="rni" value="${e(n)}" placeholder="Nombre del local"><button class="bt" data-rnok>✔</button><button class="bt" data-rnx>✕</button></div>`:`<h2 style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">${e(n)}<b class="pen" data-rn>✎</b></h2>`}${lgc(m)}<div class="lb">Calificación</div><div style="display:flex;align-items:center;justify-content:space-between"><div>${[1,2,3,4,5].map(x=>`<span class="st${(m.r||0)>=x?' on':''}" data-r="${x}">★</span>`).join('')}</div><div class="pcb" data-pc style="background:${m.bg||'#000'}"></div></div>${lcm?`<div class="lcm bd">${PCOL.map(c=>`<div class="esw${m.bg==c?' on':''}" data-pcc="${c}" style="background:${c}"></div>`).join('')}<div class="esw mcb" data-pcw></div><button class="bt" style="padding:8px 12px" data-pcd>Predeterminado</button></div>`:''}
+sh(`${cre&&n===''?`<input id="rni" data-rnm placeholder="Nombre del local" value="${e(cre.nm||'')}" style="margin:6px 0 4px">${cre.w?'<div class="err" id="crw">Se eliminará este local al salir porque falta un nombre o está repetido. Tocá la ✕ de nuevo para salir sin guardar.</div>':''}`:rnm?`<div class="ar" style="margin:6px 0 4px"><input id="rni" value="${e(n)}" placeholder="Nombre del local"><button class="bt" data-rnok>✔</button><button class="bt" data-rnx>✕</button></div>`:`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><h2 style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0;min-width:0">${e(n)}<b class="pen" data-rn>✎</b></h2><button class="bt" style="width:auto;margin:0;padding:9px 14px;font-size:13px;flex:none" data-syn>Sincronizar</button></div>`}${lgc(m)}<div class="lb">Calificación</div><div style="display:flex;align-items:center;justify-content:space-between"><div>${[1,2,3,4,5].map(x=>`<span class="st${(m.r||0)>=x?' on':''}" data-r="${x}">★</span>`).join('')}</div><div class="pcb" data-pc style="background:${m.bg||'#000'}"></div></div>${lcm?`<div class="lcm bd">${PCOL.map(c=>`<div class="esw${m.bg==c?' on':''}" data-pcc="${c}" style="background:${c}"></div>`).join('')}<div class="esw mcb" data-pcw></div><button class="bt" style="padding:8px 12px" data-pcd>Predeterminado</button></div>`:''}
 <div class="lb">Instagram</div><input data-lm="ig" value="${e(m.ig)}" placeholder="@usuario">${m.ig?`<a class="bt" target="_blank" rel="noopener" href="https://instagram.com/${encodeURIComponent(String(m.ig).replace('@',''))}">Abrir Instagram</a>`:''}
 <div class="lb">WhatsApp</div><input data-lm="wa" inputmode="tel" value="${e(m.wa)}" placeholder="5491122334455">${m.wa?`<a class="bt" target="_blank" rel="noopener" href="https://wa.me/${String(m.wa).replace(/\D/g,'')}">Abrir WhatsApp</a>`:''}
 <div class="lb">Página web</div><input data-lm="web" inputmode="url" autocapitalize="none" autocorrect="off" value="${e(m.web)}" placeholder="www.ejemplo.com">${m.web&&wnm(m.web)?`<button class="bt" style="margin-top:10px" data-web>Abrir ${e(wnm(m.web))}</button>`:''}
@@ -756,9 +759,9 @@ let tm=0;
 const rows=L.map((x,n)=>{const o=x.o,its=x.its,pr=`${its.length} ${its.length==1?'prenda':'prendas'}, ${$$(tot(its))}`;tm+=+o.tm||0;
 if(rtm)return `<div class="rw bd${rts.includes(x.key)?' rd':''}" data-rts="${e(x.key)}"><div class="rh"><b class="nm">${n+1}</b><div class="gr"><div class="n">${e(x.title)}</div><div class="s">${pr}</div></div><i class="cri">−</i></div></div>`;
 const ip=(f,p,nm)=>`<input${nm?' inputmode="numeric" data-nm':''} data-rf="${f}" data-rk="${e(x.key)}" placeholder="${p}" value="${e(o[f])}">`;
-return `<div class="rw bd${o.vd?' vs':''}"><div class="rh"><b class="nm">${n+1}</b><div class="gr"><div class="n">${e(x.title)}</div><div class="s">${pr}</div></div><div class="rcol"><div class="rad" data-rtad="${e(x.key)}">${e(x.ad)}</div><b class="ck${o.vd?' on':''}" data-rtk="${e(x.key)}">✔</b></div></div><div class="r2">${ip('pi','Piso o galería')}${ip('st','Estación')}${ip('ds','Min desde la estación',1)}${ip('tm','Min desde el local anterior',1)}</div><div class="r2" style="margin-top:8px"><button class="bt" data-rtg="${e(x.key)}">Calcular minutos</button><a class="bt" target="_blank" rel="noopener" href="${mapsRow(x)}">Ver en Maps</a></div>${x.t=='l'&&its.length?`<div class="s">${e(its.map(i=>i.t).filter(Boolean).join(', '))}</div>`:''}</div>`}).join('');
+return `<div class="rw bd${o.vd?' vs':''}"><div class="rh"><b class="nm">${n+1}</b><div class="gr"><div class="n rtn" data-rtn="${e(x.key)}">${e(x.title)}</div><div class="s">${pr}</div></div><div class="rcol"><div class="rad" data-rtad="${e(x.key)}">${e(x.ad)}</div><b class="ck${o.vd?' on':''}" data-rtk="${e(x.key)}">✔</b></div></div><div class="r2">${ip('pi','Piso o galería')}${ip('st','Estación')}${ip('ds','Min desde la estación',1)}${ip('tm','Min desde el local anterior',1)}</div><div class="r2" style="margin-top:8px"><button class="bt" data-rtg="${e(x.key)}">Calcular minutos</button><a class="bt" target="_blank" rel="noopener" href="${mapsRow(x)}">Ver en Maps</a></div>${x.t=='l'&&its.length?`<div class="s">${e(its.map(i=>i.t).filter(Boolean).join(', '))}</div>`:''}</div>`}).join('');
 const hint=S.rs=='p'?(S.rv.p?'De más caro a más barato':'De más barato a más caro'):S.rs=='e'?(S.rv.e?'De más lejos a más cerca de la estación':'De más cerca a más lejos de la estación'):'';
-const top=`<div class="sr">Ordenar:${[['m','Manual'],['p','Precio'],['e','Estación']].map(([k,v])=>`<span class="ch${S.rs==k?' on':''}" data-rs="${k}">${v}</span>`).join('')}</div>${hint?`<div class="s" style="padding:4px 12px 0">${hint}</div>`:''}`;
+const top=`<div class="sr">Ordenar:${[['m','Manual'],['p','Precio'],['e','Estación']].map(([k,v])=>`<span class="ch${S.rs==k?' on':''}" data-rs="${k}">${v}</span>`).join('')}${rtm?'':'<div class="rsh" data-rtsh aria-label="Compartir ruta"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></div>'}</div>${hint?`<div class="s" style="padding:4px 12px 0">${hint}</div>`:''}`;
 if(rtm)return top+`<div class="rl" style="padding-bottom:150px">${rows}</div>`;
 return top+`<div class="rl">${rows}</div><div class="sm"><div>Tiempo entre locales<b>${tm} min</b></div></div><div style="padding:0 12px 110px"><button class="bt" data-rtga>${rcalc?'Calculando…':'Calcular minutos con el mapa'}</button><div class="s" style="margin:6px 2px 12px">Es una estimación a pie con OpenStreetMap: Google Maps no permite calcularlo sin una clave de pago. Con «Ver en Maps» podés confirmarlo.</div><a class="bt pr" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/${L.map(x=>encodeURIComponent(x.ad)).join('/')}">Abrir recorrido en Google Maps</a></div>`};
 
@@ -769,6 +772,77 @@ const rUI=()=>{const on=S.tab=='r'&&!cur,n=rtList().length;if(rtm&&!n){rtm=0;rts
 $('#rpair').hidden=!(on&&!rtm);$('#rbar').hidden=!(on&&rtm);$('#rrev').hidden=!(on&&!rtm&&n>1&&(S.rs=='p'||S.rs=='e'));
 if(on&&rtm)$('#rbar').innerHTML=`<div class="ar dmr" style="margin-top:0"><button class="bt" data-rtc>Cancelar</button><button class="bt rd" data-rto>Confirmar</button></div><div class="err" id="rtt">${rtx()}</div>`};
 const R1=R;R=function(){R1();rUI()};
+if(!CanvasRenderingContext2D.prototype.roundRect)CanvasRenderingContext2D.prototype.roundRect=function(a,b,w,h){this.rect(a,b,w,h)};
+/* ===== sincronizar local → prendas ===== */
+function syncLocal(n){const m=S.L[n]||{},its=S.it.filter(i=>i.lo===n),map=[['wa','wa'],['ig','ig'],['web','ln'],['hs','hs'],['ad','ad'],['pi','pi'],['st','st'],['nt','nl']];
+if(!its.length)return toast('Este local todavía no tiene prendas');
+if(!map.some(([a])=>String(m[a]||'').trim()))return toast('Completá los datos del local para poder sincronizarlos');
+askC('¿Sincronizar los datos de <b>'+e(n)+'</b> con '+(its.length>1?'sus '+its.length+' prendas':'su prenda')+'? Se reemplazan WhatsApp, Instagram, página web, horarios, dirección y notas de '+(its.length>1?'las prendas':'la prenda')+' por los del local (solo los datos que el local tenga completos).','Sincronizar',()=>{its.forEach(i=>map.forEach(([a,b])=>{const v=String(m[a]||'').trim();if(v)i[b]=v}));save();R();ol(n,1);toast('Datos sincronizados con '+(its.length>1?its.length+' prendas':'la prenda'))})}
+
+/* ===== compartir recorrido ===== */
+const RSITE='https://lleimskailer.github.io/Gasto-fit/';
+const minT=(v,suf)=>{v=String(v||'').trim();return !v?'':/^\d+$/.test(v)?v+(+v==1?' minuto ':' minutos ')+suf:v};
+const mapsAll=L=>'https://www.google.com/maps/dir/'+L.map(x=>encodeURIComponent(x.ad)).join('/');
+function rinfo(x){const pk=f=>x.t=='l'?(x.o[f]||''):(x.os.map(o=>o[f]).find(Boolean)||'');
+return{t:x.t,title:x.title,ad:x.ad||'',pi:x.o.pi||'',st:x.o.st||'',ds:minT(x.o.ds,'desde la estación'),tm:minT(x.o.tm,'desde el local anterior'),hs:pk('hs'),wa:pk('wa'),ig:pk('ig'),web:x.t=='l'?(x.o.web||''):pk('ln'),nt:String(x.t=='l'?(x.o.nt||''):pk('nl')).replace(/\s*\n\s*/g,' · '),vd:!!x.o.vd,
+its:x.its.map(i=>({t:(i.t||'').trim()||'Sin título',p:pe(i)?fm(pe(i))+CUt():''})),total:tot(x.its)?fm(tot(x.its))+CUt():''}}
+const rlinks=L=>'🗺️ Ver el recorrido en Google Maps: '+mapsAll(L)+'\n\n🔗 Te recomiendo esta página para hacer tu lista de compras: '+RSITE;
+function rtxt(){const L=ra(),I=L.map(rinfo);let t='*¡Mirá mi recorrido guardado en Gasto Fit! 🗺️*\n\n📍 *'+L.length+(L.length==1?' ubicación':' ubicaciones')+'*\n\n';
+I.forEach((r,n)=>{t+='*'+(n+1)+'. '+(r.t=='l'?'🏬':'👕')+' _'+r.title+'_*'+(r.vd?' ✅':'')+'\n';
+if(r.ad)t+='🏠 Dirección: *'+r.ad+'*'+(r.pi?' ('+r.pi+')':'')+'\n';
+if(r.st||r.ds)t+='🚇 '+(r.st?'Estación: '+r.st+(r.ds?' · '+r.ds:''):r.ds)+'\n';
+if(r.tm)t+='🚶 '+r.tm+'\n';
+if(r.hs)t+='🕒 Horarios: '+r.hs+'\n';
+if(r.wa)t+='📱 WhatsApp: '+r.wa+'\n';
+if(r.ig)t+='📸 Instagram: '+r.ig+'\n';
+if(r.web)t+='🌐 Web: '+r.web+'\n';
+if(r.t=='i'&&r.its.length==1){if(r.total)t+='💵 Precio: *'+r.total+'*\n'}
+else if(r.its.length==1){t+='👕 Prenda: '+r.its[0].t+(r.its[0].p?' — '+r.its[0].p:'')+'\n'}
+else if(r.its.length){t+='👕 Prendas:\n'+r.its.map(i=>'• '+i.t+(i.p?' — '+i.p:'')).join('\n')+'\n';if(r.total)t+='💸 *Total: '+r.total+'*\n'}
+if(r.nt)t+='📝 Notas: '+r.nt+'\n';
+t+='*- - -*\n\n'});
+return t+rlinks(L)}
+function orsh(){cur={k:'rsh'};sh('<h2>Compartir ruta</h2><div class="s">Elegí cómo querés compartir tu recorrido. En los dos casos se agrega al final un link para verlo en Google Maps y otro para conocer la página.</div><button class="bt pr" style="margin-top:16px" data-rst>Compartir ruta como texto</button><button class="bt" style="margin-top:10px" data-rsi>Compartir ruta como imágenes</button>')}
+function wrapT(ctx,txt,mw,max){const out=[];String(txt).split('\n').forEach(par=>{let line='';par.split(/\s+/).filter(Boolean).forEach(w=>{while(ctx.measureText(w).width>mw){let k=w.length;while(k>1&&ctx.measureText(w.slice(0,k)).width>mw)k--;if(line){out.push(line);line=''}out.push(w.slice(0,k));w=w.slice(k)}
+const t=line?line+' '+w:w;if(ctx.measureText(t).width>mw&&line){out.push(line);line=w}else line=t});out.push(line)});
+let r=out.filter((x,i)=>x!==''||i==0);if(max&&r.length>max){r=r.slice(0,max);let l=r[max-1];while(l&&ctx.measureText(l+'…').width>mw)l=l.slice(0,-1);r[max-1]=l.trimEnd()+'…'}return r}
+async function rimgs(){const L=ra(),I=L.map(rinfo),FD=getComputedStyle(document.documentElement).getPropertyValue('--d').trim()||'"Arial Narrow",sans-serif',FB=getComputedStyle(document.body).fontFamily||'system-ui,sans-serif';
+try{await Promise.all([['800 40px',FD],['700 30px',FB],['500 30px',FB],['400 30px',FB]].map(([f,fam])=>document.fonts.load(f+' '+fam)));await document.fonts.ready}catch(x){}
+const W=1080,P=44,CW=W-P*2,Y='#ffc233',pages=[];for(let k=0;k<I.length;k+=4)pages.push(I.slice(k,k+4));
+const sc=document.createElement('canvas').getContext('2d'),LH=38,LW=210,VW0=CW-64-LW;
+const fT='800 54px '+FD,fP='800 46px '+FD,fL='700 20px '+FB,fV='500 29px '+FB,fVB='700 31px '+FB;
+const rows=r=>{const R=[];if(r.ad)R.push(['DIRECCIÓN',r.ad+(r.pi?' · '+r.pi:''),1,3]);if(r.st||r.ds)R.push(['ESTACIÓN',r.st?r.st+(r.ds?' · '+r.ds:''):r.ds,0,2]);if(r.tm)R.push(['TRASLADO',r.tm,0,2]);if(r.hs)R.push(['HORARIOS',r.hs,0,2]);if(r.wa)R.push(['WHATSAPP',r.wa,0,1]);if(r.ig)R.push(['INSTAGRAM',r.ig,0,1]);if(r.web)R.push(['WEB',r.web.replace(/^https?:\/\//,''),0,2]);
+if(!(r.t=='i'&&r.its.length==1))R.push([r.its.length>1?'PRENDAS':'PRENDA',r.its.map(i=>i.t+(i.p?' ('+i.p+')':'')).join(', '),0,3]);if(r.nt)R.push(['NOTAS',r.nt,0,3]);return R.filter(q=>q[1])};
+const lay=r=>{sc.font=fP;const pw=r.total?sc.measureText(r.total).width+24:0;sc.font=fT;const tl=wrapT(sc,r.title,CW-64-96-pw,2),rw=rows(r).map(q=>{sc.font=q[2]?fVB:fV;return{lb:q[0],b:q[2],ls:wrapT(sc,q[1],VW0,q[3])}});
+const rh=rw.reduce((s,q)=>s+q.ls.length*LH+14,0);return{tl,rw,pw,h:30+tl.length*58+22+(rw.length?22+rh:0)+18}};
+const out=[];
+for(let pg=0;pg<pages.length;pg++){const lays=pages[pg].map(lay),HD=236,FT=150,H=Math.max(1350,HD+lays.reduce((s,l)=>s+l.h+24,0)+FT);
+const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+x.fillStyle='#050505';x.fillRect(0,0,W,H);const gr=x.createRadialGradient(W/2,H,0,W/2,H,W*.95);gr.addColorStop(0,'rgba(255,194,51,.34)');gr.addColorStop(1,'rgba(255,194,51,0)');x.fillStyle=gr;x.fillRect(0,0,W,H);
+x.textBaseline='alphabetic';
+if('letterSpacing' in x)x.letterSpacing='5px';x.font='700 24px '+FB;x.fillStyle=Y;x.fillText('GASTO FIT · RECORRIDO',P,84);if('letterSpacing' in x)x.letterSpacing='0px';
+x.font='800 104px '+FD;x.fillStyle='#fff';x.fillText('Mi recorrido',P,182);
+const a=pg*4+1,b=pg*4+pages[pg].length;x.font='500 28px '+FB;x.fillStyle='#b5b5b5';x.textAlign='right';x.fillText(a==b?'Ubicación '+a+' de '+I.length:'Ubicaciones '+a+'–'+b+' de '+I.length,W-P,182);x.textAlign='left';
+let y=HD;
+pages[pg].forEach((r,k)=>{const l=lays[k],cx=P;x.fillStyle='#101010';x.strokeStyle='#2e2e2e';x.lineWidth=2;x.beginPath();x.roundRect(cx,y,CW,l.h,30);x.fill();x.stroke();
+x.fillStyle=Y;x.beginPath();x.arc(cx+32+32,y+30+32,32,0,7);x.fill();x.fillStyle='#000';x.font='800 44px '+FD;x.textAlign='center';x.fillText(String(a+k),cx+64,y+30+46);x.textAlign='left';
+x.fillStyle=Y;x.font=fT;l.tl.forEach((t,j)=>x.fillText(t,cx+32+96,y+30+48+j*58));
+if(r.total){x.font=fP;x.fillStyle='#fff';x.textAlign='right';x.fillText(r.total,cx+CW-32,y+30+46);x.textAlign='left'}
+let ry=y+30+l.tl.length*58+22;
+if(l.rw.length){x.strokeStyle='#2a2a2a';x.lineWidth=2;x.beginPath();x.moveTo(cx+32,ry-6);x.lineTo(cx+CW-32,ry-6);x.stroke();ry+=22;
+l.rw.forEach(q=>{if('letterSpacing' in x)x.letterSpacing='2px';x.font=fL;x.fillStyle=Y;x.fillText(q.lb,cx+32,ry+26);if('letterSpacing' in x)x.letterSpacing='0px';x.font=q.b?fVB:fV;x.fillStyle=q.b?'#fff':'#d8d8d8';q.ls.forEach((t,j)=>x.fillText(t,cx+32+LW,ry+28+j*LH));ry+=q.ls.length*LH+14})}
+y+=l.h+24});
+x.font='700 32px '+FB;x.fillStyle=Y;x.fillText('Armá tu lista de compras en Gasto Fit',P,H-78);x.font='500 26px '+FB;x.fillStyle='#bdbdbd';x.fillText(RSITE.replace('https://',''),P,H-40);
+x.textAlign='right';x.fillText((pg+1)+' / '+pages.length,W-P,H-40);x.textAlign='left';
+out.push(await new Promise(r=>c.toBlob(r,'image/png')))}
+return out}
+async function rshare(kind){const L=ra();if(!L.length)return;
+if(kind=='t'){const t=rtxt(),u='https://wa.me/?text='+encodeURIComponent(t);if(u.length>7500&&navigator.share){try{await navigator.share({text:t})}catch(x){}return}const a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();return}
+toast('Generando imágenes…');let bl;try{bl=await rimgs()}catch(x){return toast('No se pudieron generar las imágenes')}
+const files=bl.map((b,k)=>new File([b],'ruta-'+(k+1)+'.png',{type:'image/png'})),text=rlinks(L);
+try{if(navigator.canShare&&navigator.canShare({files})){await navigator.share({files,text});return}}catch(x){if(x&&x.name=='AbortError')return}
+files.forEach((f,k)=>setTimeout(()=>{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove()},k*400));try{navigator.clipboard.writeText(text).catch(()=>{})}catch(x){}toast('Imágenes descargadas. Los links quedaron copiados')}
+
 
 /* agregar al recorrido (+) */
 const rph=()=>{const E=rtList();
@@ -832,10 +906,15 @@ const lgs=(m,k,ph)=>`<div class="lgsl"><label class="ph lg bd"${m[k]?` data-lgx=
 const lgc=m=>`<div class="lgr" id="lgr">${lgs(m,'lg','＋ Logo o foto del local')}${lgs(m,'lg2','＋ Segunda foto<small class="lgh">portada en el menú de locales</small>')}</div><div class="lgd"><i class="on"></i><i></i></div><div class="s" style="text-align:center;margin-top:6px">Deslizá para ver la segunda foto. La segunda foto es la portada que se muestra en el menú de locales (si no hay segunda, se usa la primera).</div>`;
 const lcImg=(k,m)=>{const u=m.lg2||m.lg;return u?`<img src="${u}">`:`<span>${e(k)}</span>`};
 const rf=()=>{R();if(cur&&cur.k=='l')ol(cur.n,1)};
-const SEL='[data-ed],[data-edl],[data-dli],[data-dlt],[data-fan],[data-gxx],[data-md2],[data-tt],[data-cd],[data-hi],[data-mq],[data-cfg],[data-ct],[data-cl2],[data-sel],[data-cf],[data-op],[data-tg],[data-gcs],[data-shi],[data-wa],[data-scm],[data-mdone],[data-imp],[data-qr],[data-sc],[data-inc],[data-dd],[data-fo],[data-fv],[data-egg],[data-k],[data-h],[data-o],[data-t],[data-l],[data-cl],[data-c],[data-add],[data-di],[data-r],[data-gen],[data-cp],[data-imp],[data-oc],[data-code],[data-bud],[data-fab],[data-clr],[data-sb],[data-vs],[data-mv],[data-rs],[data-del],[data-apf],[data-ap],[data-rpm],[data-rpc],[data-rpo],[data-rp],[data-ap2],[data-apok],[data-crok],[data-web],[data-lna],[data-lnm],[data-lnc],[data-lno],[data-rl],[data-nfo],[data-nfv],[data-lgx],[data-rvc],[data-vw],[data-vwx],[data-vwb],[data-ro],[data-rvx],[data-rn],[data-rnok],[data-rnx],[data-pc],[data-pcc],[data-pcw],[data-pcd],[data-ca],[data-cdm],[data-cdc],[data-cdo],[data-cr],[data-uh],[data-ncok],[data-dlo],[data-dlp],[data-dm],[data-dmc],[data-dmo],[data-rm],[data-vt],[data-lv],[data-rta],[data-rtm],[data-rtc],[data-rto],[data-rts],[data-rtk],[data-rtad],[data-rtg],[data-rtga],[data-rtr],[data-rtv],[data-rtp],[data-rtx],[data-rtok]';
+const SEL='[data-ed],[data-edl],[data-dli],[data-dlt],[data-fan],[data-gxx],[data-md2],[data-tt],[data-cd],[data-hi],[data-mq],[data-cfg],[data-ct],[data-cl2],[data-sel],[data-cf],[data-op],[data-tg],[data-gcs],[data-shi],[data-wa],[data-scm],[data-mdone],[data-imp],[data-qr],[data-sc],[data-inc],[data-dd],[data-fo],[data-fv],[data-egg],[data-k],[data-h],[data-o],[data-t],[data-l],[data-cl],[data-c],[data-add],[data-di],[data-r],[data-gen],[data-cp],[data-imp],[data-oc],[data-code],[data-bud],[data-fab],[data-clr],[data-sb],[data-vs],[data-mv],[data-rs],[data-del],[data-apf],[data-ap],[data-rpm],[data-rpc],[data-rpo],[data-rp],[data-ap2],[data-apok],[data-crok],[data-web],[data-lna],[data-lnm],[data-lnc],[data-lno],[data-rl],[data-nfo],[data-nfv],[data-lgx],[data-rvc],[data-vw],[data-vwx],[data-vwb],[data-ro],[data-rvx],[data-rn],[data-rnok],[data-rnx],[data-pc],[data-pcc],[data-pcw],[data-pcd],[data-ca],[data-cdm],[data-cdc],[data-cdo],[data-cr],[data-uh],[data-ncok],[data-dlo],[data-dlp],[data-dm],[data-dmc],[data-dmo],[data-rm],[data-vt],[data-lv],[data-rta],[data-rtm],[data-rtc],[data-rto],[data-rts],[data-rtk],[data-rtad],[data-rtg],[data-rtga],[data-rtr],[data-rtv],[data-rtp],[data-rtx],[data-rtok],[data-syn],[data-rtn],[data-rtsh],[data-rst],[data-rsi]';
 document.addEventListener('click',ev=>{if(ev.target.id=='m'||ev.target.classList.contains('qw')){if(gate())cl();return}if(lp&&ev.target.closest('#fb')){lp=0;return}const t=ev.target.closest(SEL);if(!t)return;const d=t.dataset;
 if(d.egg!==undefined){eg++;clearTimeout(et);et=setTimeout(()=>eg=0,900);if(eg>=3){eg=0;S.ec=(S.ec||0)+1;save();found('draw');oe()}}
 else if(d.vt){const i=g(d.vt);if(!i)return;const on=!effVi(i);i.vi=on?'Sí':'No';if(on){const m=S.L[i.lo];if(m&&covered(i)&&m.vi=='No')m.vi='Sí'}sk=1;save();rf();if(on){snd('pn');visitfx(d.vt);if(!hasAd(i)&&!covered(i))setTimeout(()=>toast('Agregale una dirección a la prenda para que aparezca en el recorrido'),900)}else snd('c')}
+else if(d.syn!==undefined){syncLocal(cur.n)}
+else if(d.rtn!==undefined){const x=rtList().find(z=>z.key==d.rtn);if(!x)return;if(x.t=='l')ol(x.k);else oi(x.o.id)}
+else if(d.rtsh!==undefined){orsh()}
+else if(d.rst!==undefined){rshare('t')}
+else if(d.rsi!==undefined){rshare('i')}
 else if(d.lv){const m=S.L[cur.n];if(!m)return;m.vi=d.lv;if(d.lv=='No')S.it.forEach(i=>{if(i.lo===cur.n&&covered(i))i.vi='No'});save();ol(cur.n,1);R()}
 else if(d.rta!==undefined){rsel=[];S.rf=F0();rpt='p';orp(0)}
 else if(d.rtp){rpt=d.rtp;orp(1)}
